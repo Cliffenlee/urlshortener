@@ -1,4 +1,4 @@
-import {Box, Button, Flex, Heading, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, useDisclosure, useToast} from "@chakra-ui/react";
+import {Box, Button, Flex, Heading, Input, InputGroup, InputLeftAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Textarea, useDisclosure, useToast} from "@chakra-ui/react";
 import { useRef, useState } from "react";
 import {LinkIcon} from "@chakra-ui/icons";
 import validator from "validator";
@@ -7,11 +7,26 @@ import axios from "axios";
 export default function Home() {
 
   const url = useRef()
-  const URL = "http://localhost:8080/"
+  const URL = "lite.gq/"
   const [result, setResult] = useState("")
+  const [oneResult, setOneResult] = useState("")
   const [button, setButton] = useState(<Button  onClick={getShortenedUrl} width="20%"colorScheme="blue">Shorten</Button>)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
+
+  function copyLink (resultUrl) {
+    // console.log(resultUrl)
+    // var input = document.createElement('input');
+    // input.setAttribute('value', resultUrl);
+    // document.body.appendChild(input);
+    // input.select();
+    // var result = document.execCommand('copy');
+    // document.body.removeChild(input);
+
+    var target = document.getElementById("results")
+    target.select()
+    document.execCommand("copy")
+  }
 
   async function getShortenedUrl () {
     try {
@@ -25,19 +40,20 @@ export default function Home() {
         />
       )
       if (validator.isURL(url.current.value)) {
-        console.log("valid")
+        // console.log("valid")
         const request = {long_url: url.current.value}
-        const response = await axios.post(URL+"url", request)
+        // console.log(URL+"url")
+        const response = await axios.post("http://"+ URL + "/url", request)
 
         if (response.status == 200) {
-          console.log(response)
+          // console.log(response)
           const resultUrl = URL+response.data.code
-          console.log(url)
+          // console.log(url)
           setResult(
               <InputGroup size="md">
-                <InputLeftAddon children={<LinkIcon/>}/>
-                <Input _placeholder={{ color: 'black' }} fontWeight="500" color="black" placeholder={resultUrl} borderTopEndRadius={0} borderBottomEndRadius={0} disabled={true}/>
-                <Button borderTopStartRadius={0} borderBottomStartRadius={0} colorScheme="green" onClick={() => {navigator.clipboard.writeText(resultUrl)}}>Copy Link</Button>
+                <InputLeftAddon><LinkIcon/></InputLeftAddon>
+                <Input id="results" value={resultUrl} _placeholder={{ color: 'black' }} fontWeight="500" color="black" placeholder={resultUrl} borderTopEndRadius={0} borderBottomEndRadius={0} readOnly={true}/>
+                <Button borderTopStartRadius={0} borderBottomStartRadius={0} colorScheme="green" onClick={() => {copyLink(resultUrl)}}>Copy Link</Button>
               </InputGroup>)
           onOpen()
         } else {

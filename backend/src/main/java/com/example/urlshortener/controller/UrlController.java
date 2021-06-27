@@ -22,7 +22,7 @@ public class UrlController {
 
 
     // Shorten URL and add to url object to DB
-    @CrossOrigin(origins = {"http://localhost:3000"})
+    @CrossOrigin(origins = {"http://localhost:3000", "lite.gq", "http://url-shortener-tap.s3-website-ap-southeast-1.amazonaws.com"})
     @PostMapping("/url")
     public ResponseEntity shortenUrl (@RequestBody HashMap body) {
         try {
@@ -38,10 +38,9 @@ public class UrlController {
     }
 
     // Get long URL from DB
-    @CrossOrigin(origins = {"http://localhost:3000"})
+    @CrossOrigin(origins = {"http://localhost:3000", "lite.gq", "http://url-shortener-tap.s3-website-ap-southeast-1.amazonaws.com"})
     @GetMapping("/{code}")
     public RedirectView getLongUrl (@PathVariable String code) {
-        System.out.println("im in");
         Optional<Url> url = urlRepository.findByCode(code);
 
         if(!url.isPresent()) {
