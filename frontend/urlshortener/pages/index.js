@@ -25,8 +25,8 @@ export default function Home() {
         setResult(
             <InputGroup size="md">
               <InputLeftAddon children={<LinkIcon/>}/>
-              <Input _placeholder={{ color: 'black' }} fontWeight="500" color="black" placeholder={url} disabled={true}/>
-              <Button colorScheme="green" onClick={() => {navigator.clipboard.writeText(url)}}>Copy Link</Button>
+              <Input _placeholder={{ color: 'black' }} fontWeight="500" color="black" placeholder={url} borderTopEndRadius={0} borderBottomEndRadius={0} disabled={true}/>
+              <Button borderTopStartRadius={0} borderBottomStartRadius={0} colorScheme="green" onClick={() => {navigator.clipboard.writeText(url)}}>Copy Link</Button>
             </InputGroup>)
         onOpen()
       } else {
